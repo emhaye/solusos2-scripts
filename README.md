@@ -18,11 +18,11 @@ First run downloads the pisi-index.xml.xz and extracts it. On the second
 run it will attempt to download and extract all the required base packages
 and dependencies for a working system. Once this is done:
 
-sudo chroot work/
-pisi install --ignore-comar *.pisi
-rm -f *.pisi
-service dbus start
-pisi configure-pending
+   sudo chroot work/
+   pisi install --ignore-comar *.pisi
+   rm -f *.pisi
+   service dbus start
+   pisi configure-pending
 
 This is enough to have a base system to build packages from. It is recommended
 to add your distribution repository if possible. 
