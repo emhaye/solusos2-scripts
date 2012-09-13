@@ -1,10 +1,18 @@
-from lxml import etree
+#!/usr/bin/env python
 
-import os
-import os.path
-import urllib2
 import sys
-import zipfile
+
+try:
+	from lxml import etree
+
+	import os
+	import os.path
+	import urllib2
+	import zipfile
+except Exception, ex:
+	print "Dependencies not met"
+	print ex
+	sys.exit(-1)
 
 class PisiPackage:
 
