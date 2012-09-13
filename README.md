@@ -14,8 +14,9 @@ a set of packages and dependencies into a "work" directory.
 ### Important Note
 Once you've cloned this repository you'll have incorrect owners set for the
 files in base/
+
 Fix as shown here:
-    sudo chown -R root:root base/
+    `sudo chown -R root:root base/`
 
 
 ### Usage
