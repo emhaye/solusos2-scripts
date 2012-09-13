@@ -11,8 +11,15 @@ pisistrap
 Currently under development. This script simply downloads and extracts
 a set of packages and dependencies into a "work" directory.
 
-i.e.:
-./pisistrap.py
+### Important Note
+Once you've cloned this repository you'll have incorrect owners set for the
+files in base/
+Fix as shown here:
+    sudo chown -R root:root base/
+
+
+### Usage
+    ./pisistrap.py
 
 First run downloads the pisi-index.xml.xz and extracts it. On the second
 run it will attempt to download and extract all the required base packages
