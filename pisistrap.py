@@ -16,10 +16,11 @@ except Exception, ex:
 
 class PisiPackage:
 
-	def __init__(self, name=None, rdeps=None, uri=None):
+	def __init__(self, name=None, rdeps=None, uri=None, partof=None):
 		self.name = name
 		self.rdeps = rdeps
 		self.uri = uri
+		self.partof = partof
 
 class PisiIndex:
 
@@ -35,6 +36,7 @@ class PisiIndex:
 			name = None
 			rdeps = list()
 			uri = None
+			partof = None
 			for i in e:
 				if i.tag == "Name":
 					name = i.text
@@ -45,7 +47,9 @@ class PisiIndex:
 						rdeps.append(dep.text)
 				if i.tag == "PackageURI":
 					uri = i.text
-			self.pkgTree[name] = PisiPackage(name=name, rdeps=rdeps,uri=uri)
+				if i.tag == "PartOf":
+					partof = i.text
+			self.pkgTree[name] = PisiPackage(name=name, rdeps=rdeps,uri=uri, partof=partof)
 		self.pIndex.close()
 
 
@@ -76,8 +80,12 @@ class PisiDownloader:
 
 		# Grab all dependencies of base system
 		depTree = list()
-		for pkg in base_system:
-			depTree.extend(index.compute_dependencies(pkg))
+		#for pkg in base_system:
+		#	depTree.extend(index.compute_dependencies(pkg))
+		for pkg in index.pkgTree:
+			pkg_ = index.pkgTree[pkg]
+			if pkg_.partof == "system.base" or pkg_.partof == "system.devel":
+				depTree.extend(index.compute_dependencies(pkg))
 
 		# clean them out
 		rDepTree = list()
@@ -87,7 +95,7 @@ class PisiDownloader:
 		depTree = None # restore some memory ^^
 
 		if not os.path.exists(output_dir):
-			print "%s does not exist. Creating it"
+			print "%s does not exist. Creating it" % output_dir
 			os.mkdir(output_dir)
 
 
@@ -188,7 +196,7 @@ class PisiUtil:
 		os.system("sudo cp -Rv base/* %s/etc/" % output_dir)
 
 if __name__ == "__main__":
-	baseURI = "http://paketler.pardus-linux.org/pardus/2012/testing/x86_64"
+	baseURI = "http://paketler.pardus-linux.org/pardus/2012/testing/i686"
 	if not os.path.exists("pisi-index.xml"):
 
 		pkgIndex = "%s/%s" % (baseURI, "pisi-index.xml.xz")
